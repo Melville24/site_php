@@ -74,7 +74,7 @@ $conn->close();
         <a class="btn btn-primary btn-xl rounded-pill mt-5" href="#terms-section">Далі</a>
     </div>
 </div>
-<div class="bg-circle-1 bg-circle" style="background: radial-gradient(circle, #4a90e2, #ff6eb4);"></div>
+<div class="bg-circle-1 bg-circle" style="background: radial-gradient(circle, #ff9a76, #ffc371);"></div>
 <div class="bg-circle-2 bg-circle" style="background: radial-gradient(circle, #5aa1f2, #ff84c1);"></div>
 <div class="bg-circle-3 bg-circle" style="background: radial-gradient(circle, #4dc0ff, #ff7ac7);"></div>
 <div class="bg-circle-4 bg-circle" style="background: radial-gradient(circle, #70c8ff, #ff99d9);"></div>
