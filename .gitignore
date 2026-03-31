@@ -1,5 +1,1 @@
-<?php
-$servername = "bezserv.mysql.tools";
-$username = "bezserv_baza10";
-$password = "tJj6bS#5*8";
-$dbname = "bezserv_baza10";
+baza_connect.php
