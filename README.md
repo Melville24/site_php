@@ -135,3 +135,143 @@ The application includes:
 - SQL injection prevention
 - Output sanitization using `htmlspecialchars()`
 - Duplicate term protection
+
+---
+
+# Інформаційний вебзастосунок про пошук гомологів і BLAST
+
+Простий вебзастосунок на PHP та MySQL для вивчення термінології BLAST і пошуку гомологів.
+
+Застосунок дозволяє:
+
+- Переглядати базові терміни BLAST
+- Динамічно отримувати визначення за допомогою HTMX
+- Додавати власні біологічні терміни та визначення
+- Зберігати користувацькі терміни у базі даних MySQL
+- Працювати без перезавантаження сторінки завдяки AJAX
+
+---
+
+## Основні можливості
+
+- Динамічний пошук визначень через HTMX
+- Додавання користувацьких термінів
+- Інтеграція з MySQL
+- Захист від дублювання термінів
+- Інтерактивний інтерфейс
+- Чутливий до регістру пошук через `BINARY`
+
+---
+
+## Використані технології
+
+- PHP
+- MySQL
+- JavaScript (Fetch API)
+- HTMX
+- HTML5 / CSS3
+
+---
+
+## Налаштування бази даних
+
+### Створення бази даних
+
+```sql
+CREATE DATABASE blast_db;
+```
+
+### Створення таблиці
+
+```sql
+CREATE TABLE test_table (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    term VARCHAR(255) NOT NULL UNIQUE,
+    definition TEXT NOT NULL
+);
+```
+
+---
+
+## Конфігурація бази даних
+
+Створіть файл `baza_connect.php` та додайте:
+
+```php
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "blast_db";
+?>
+```
+
+---
+
+## Принцип роботи
+
+### Пошук термінів
+
+Застосунок містить базові терміни BLAST:
+
+- Hit
+- E-value
+- Identity
+
+При натисканні на термін виконується HTMX-запит:
+
+```html
+hx-get="index.php?term=Hit"
+```
+
+Сервер виконує пошук визначення у базі даних і динамічно вставляє результат на сторінку без її перезавантаження.
+
+Отримання визначення реалізоване через підготовлені SQL-запити:
+
+```php
+$stmt = $conn->prepare("SELECT definition FROM test_table WHERE BINARY term = ?");
+```
+
+---
+
+### Додавання нових термінів
+
+Користувач може додати:
+
+- Термін
+- Його визначення
+
+Перед додаванням дані перевіряються та проходять перевірку на дублікати:
+
+```php
+$check = $conn->prepare("SELECT id FROM test_table WHERE term = ?");
+```
+
+Якщо термін відсутній у базі даних, він додається:
+
+```php
+$stmt = $conn->prepare("INSERT INTO test_table (term, definition) VALUES (?, ?)");
+```
+
+Frontend використовує JavaScript Fetch API для асинхронних запитів:
+
+```javascript
+fetch("index.php", {
+    method: "POST",
+    body: formData,
+    headers: { "X-Requested-With": "XMLHttpRequest" }
+})
+```
+
+Після успішного додавання новий термін автоматично з’являється в інтерфейсі без перезавантаження сторінки.
+
+---
+
+## Безпека
+
+У застосунку реалізовано:
+
+- Prepared statements для SQL-запитів
+- Захист від SQL-інʼєкцій
+- Санітизацію виводу через `htmlspecialchars()`
+- Захист від дублювання термінів
